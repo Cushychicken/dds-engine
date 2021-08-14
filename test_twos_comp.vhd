@@ -2,7 +2,7 @@
 -- File name   : twos_comp.vhd
 --
 -- Project     : cushychicken/dds-engine
---               
+--
 -- Description : Testbench - two's comp block
 --
 -- Author(s)   : Nash Reilly
@@ -10,79 +10,95 @@
 -- Date        : August 12, 2021
 --
 -- Note(s)     : Tests twos_comp.vhd
--- 
+--
 ----------------------------------------------------------------------------
 
 library ieee;
-use ieee.std_logic_1164.all;
-use ieee.std_logic_unsigned.all;
-use ieee.std_logic_arith.all;
+  use ieee.std_logic_1164.all;
+  use ieee.std_logic_unsigned.all;
+  use ieee.std_logic_arith.all;
 
 entity test_twos_comp is
 end entity test_twos_comp;
 
 architecture test_twos_comp_arch of test_twos_comp is
 
-	constant t_clk_per : time := 20 ns;  -- Period of a 50MHZ Clock
-  
-	component twos_comp
-		port (Clock   : in  STD_LOGIC;
-			  Reset	  : in	STD_LOGIC;
-			  Comp	  : in  STD_LOGIC;
-			  Data	  : in  STD_LOGIC_VECTOR(13 downto 0);
-			  Output  : out STD_LOGIC_VECTOR(13 downto 0));
-	end component;
+  constant t_clk_per : time := 20 ns; -- Period of a 50MHZ Clock
 
-	signal  Clock_TB	: STD_LOGIC;
-	signal  Reset_TB	: STD_LOGIC;
-	signal  Comp_TB		: STD_LOGIC;
-	signal  Data_TB		: STD_LOGIC_VECTOR(13 downto 0);
-	signal  Output_TB	: STD_LOGIC_VECTOR(13 downto 0);
-  
-	signal  i	: integer;
+  component twos_comp is
+    port (
+      clock  : in    std_logic;
+      reset  : in    std_logic;
+      comp   : in    std_logic;
+      data   : in    std_logic_vector(13 downto 0);
+      output : out   std_logic_vector(13 downto 0)
+    );
+  end component;
+
+  signal clock_tb  : std_logic;
+  signal reset_tb  : std_logic;
+  signal comp_tb   : std_logic;
+  signal data_tb   : std_logic_vector(13 downto 0);
+  signal output_tb : std_logic_vector(13 downto 0);
+
+  signal i : integer;
 
 begin
-  
+
   --Component Declaration
-    
-    DUT1: twos_comp port map (Clock		=> Clock_TB, 
-                              Reset		=> Reset_TB,
-							  Comp		=> Comp_TB,
-							  Data		=> Data_TB,
-                              Output	=> Output_TB);
-   
-    CLOCK_STIM : process
-    begin
-		Clock_TB <= '0'; wait for 0.5*t_clk_per; 
-		Clock_TB <= '1'; wait for 0.5*t_clk_per; 
 
-		-- Assertion ends simulation after 10ms
-		assert now < 10 ms report "Simulation Finished." severity FAILURE;
-    end process CLOCK_STIM;
-       
-    RESET_STIM : process
-    begin
-        Reset_TB <= '0'; wait for 2*t_clk_per;
-        Reset_TB <= '1'; 
-		wait;
-    end process RESET_STIM;
-    
-    DATA_STIM : process
-    begin
-		Data_TB <= "00000000000000";
-		Comp_TB <= '0';
-		wait for 3*t_clk_per;
-		while ( Data_TB < "11111111111111" ) loop
-			Comp_TB <= '1';
-			wait for t_clk_per;
+  dut1 : component twos_comp
+    port map (
+      clock  => clock_tb,
+      reset  => reset_tb,
+      comp   => comp_tb,
+      data   => data_tb,
+      output => output_tb
+    );
 
-			Data_TB <= (Data_TB + 1); 
-			Comp_TB <= '0';
-			wait for t_clk_per;
-		end loop;
-		wait;
-    end process DATA_STIM;
-      
-end architecture;
+  clock_stim : process is
+  begin
+
+    clock_tb <= '0';
+    wait for 0.5 * t_clk_per;
+    clock_tb <= '1';
+    wait for 0.5 * t_clk_per;
+
+    -- Assertion ends simulation after 10ms
+    assert now < 10 ms
+      report "Simulation Finished."
+      severity FAILURE;
+
+  end process clock_stim;
+
+  reset_stim : process is
+  begin
+
+    reset_tb <= '0';
+    wait for 2 * t_clk_per;
+    reset_tb <= '1';
+    wait;
+
+  end process reset_stim;
+
+  data_stim : process is
+  begin
+
+    data_tb   <= "00000000000000";
+    comp_tb   <= '0';
+    wait for 3 * t_clk_per;
+    while (data_tb < "11111111111111") loop
+      comp_tb <= '1';
+      wait for t_clk_per;
+
+      data_tb <= (data_tb + 1);
+      comp_tb <= '0';
+      wait for t_clk_per;
+    end loop;
+    wait;
+
+  end process data_stim;
+
+end architecture test_twos_comp_arch;
 
 
