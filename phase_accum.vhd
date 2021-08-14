@@ -29,15 +29,19 @@ end entity phase_accum;
 
 architecture phase_accum_arch of phase_accum is
 
+  signal phase_temp : std_logic_vector(31 downto 0);
+
 begin
 
   accumulator : process (clock, reset) is
   begin
 
     if (reset = '0') then
-      phase_out <= x"00000000";
+      phase_out  <= x"00000000";
+      phase_temp <= x"00000000";
     elsif (clock'event and clock='1') then
-      phase_out <= phase_out + (x"0000" & freq0_tune);
+      phase_temp <= freq0_tune + phase_temp;
+      phase_out  <= phase_temp;
     end if;
 
   end process accumulator;
