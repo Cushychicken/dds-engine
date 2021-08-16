@@ -68,9 +68,14 @@ begin
 
     addr_tb   <= "00000000000000";
     wait for t_clk_per;
-    while (addr_tb < "11111111111111") loop
+    while (true) loop
       addr_tb <= (addr_tb + 1);
       wait for t_clk_per;
+	  -- Assertion ends simulation after 10ms
+	  assert now < 1 ms
+	    report "Simulation Finished."
+        severity FAILURE;
+
     end loop;
     wait;
 
