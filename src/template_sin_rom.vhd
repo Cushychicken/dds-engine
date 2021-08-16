@@ -46,7 +46,7 @@ begin
 
     if (clock'event and clock='1') then
       if (addr >= 0 and addr <= 1023) then
-        data <= rom(conv_integer(address));
+        data <= rom(conv_integer(addr));
       end if;
     end if;
 
