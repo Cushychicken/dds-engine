@@ -26,15 +26,15 @@ architecture test_sin_rom_arch of test_sin_rom is
   constant t_clk_per : time := 20 ns; -- Period of a 50MHZ Clock
 
   component sin_rom is
-  port (
-    clock : in    std_logic;
-    addr  : in    std_logic_vector(13 downto 0);
-    data  : out   std_logic_vector(11 downto 0)
-  );
+    port (
+      clock : in    std_logic;
+      addr  : in    std_logic_vector(13 downto 0);
+      data  : out   std_logic_vector(11 downto 0)
+    );
   end component;
 
-  signal clock_tb      : std_logic;
-  signal addr_tb : std_logic_vector(13 downto 0);
+  signal clock_tb : std_logic;
+  signal addr_tb  : std_logic_vector(13 downto 0);
   signal data_tb  : std_logic_vector(11 downto 0);
 
   signal i : integer;
@@ -45,9 +45,9 @@ begin
 
   dut1 : component sin_rom
     port map (
-      clock      => clock_tb,
-      addr		 => addr_tb,
-      data		=> data_tb
+      clock => clock_tb,
+      addr  => addr_tb,
+      data  => data_tb
     );
 
   clock_stim : process is
@@ -67,12 +67,14 @@ begin
 
   addr_stim : process is
   begin
-    addr_tb <= "00000000000000";
-	while (addr_tb < "11111111111111") loop
-		addr_tb <= addr_tb + 1;
-		wait for t_clk_per;
-	end loop;
+
+    addr_tb   <= "00000000000000";
+    while (addr_tb < "11111111111111") loop
+      addr_tb <= addr_tb + 1;
+      wait for t_clk_per;
+    end loop;
     wait;
+
   end process addr_stim;
 
 end architecture test_sin_rom_arch;
