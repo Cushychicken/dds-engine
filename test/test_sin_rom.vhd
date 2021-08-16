@@ -15,8 +15,8 @@
 
 library ieee;
   use ieee.std_logic_1164.all;
-  use ieee.std_logic_unsigned.all;
   use ieee.std_logic_arith.all;
+  use ieee.std_logic_unsigned.all;
 
 entity test_sin_rom is
 end entity test_sin_rom;
@@ -25,7 +25,7 @@ architecture test_sin_rom_arch of test_sin_rom is
 
   constant t_clk_per : time := 20 ns; -- Period of a 50MHZ Clock
 
-  component sin_rom is
+  component sin_rom_10bits_1024words is
     port (
       clock : in    std_logic;
       addr  : in    std_logic_vector(13 downto 0);
@@ -37,13 +37,11 @@ architecture test_sin_rom_arch of test_sin_rom is
   signal addr_tb  : std_logic_vector(13 downto 0);
   signal data_tb  : std_logic_vector(11 downto 0);
 
-  signal i : integer;
-
 begin
 
   --Component Declaration
 
-  dut1 : component sin_rom
+  dut1 : component sin_rom_10bits_1024words
     port map (
       clock => clock_tb,
       addr  => addr_tb,
@@ -59,7 +57,7 @@ begin
     wait for 0.5 * t_clk_per;
 
     -- Assertion ends simulation after 10ms
-    assert now < 10 ms
+    assert now < 1 ms
       report "Simulation Finished."
       severity FAILURE;
 
@@ -69,8 +67,9 @@ begin
   begin
 
     addr_tb   <= "00000000000000";
+    wait for t_clk_per;
     while (addr_tb < "11111111111111") loop
-      addr_tb <= addr_tb + 1;
+      addr_tb <= (addr_tb + 1);
       wait for t_clk_per;
     end loop;
     wait;
