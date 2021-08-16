@@ -22,7 +22,7 @@ coeff = [ f'{index} => "{data:012b}"' for index, data in enumerate(sin_table)]
 
 filename = f"src/sin_rom_{bitdepth}bits_{N}words.vhd"
 with open(filename, 'w') as f:
-    coeff = "\n,".join(coeff)
+    coeff = ",\n".join(coeff)
     sinrom_template = sinrom_template.format(sintable=coeff)
     f.write(sinrom_template)
     f.close()
