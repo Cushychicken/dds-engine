@@ -43,10 +43,22 @@ begin
 
   memory : process (clock) is
   begin
-
-    if (clock'event and clock='1') then
-      if (addr >= 0 and addr <= 1023) then
-        data <= rom(conv_integer(addr));
+    
+	if (clock'event and clock='1') then
+      if (addr(13 downto 4) >= 0 and addr(13 downto 4) <= 1023) then
+		-- 0 < n < pi/2
+		if (addr(13 downto 12) = "00") then
+          data <= rom(conv_integer(addr(13 downto 4)));
+		-- pi/2 < n < pi
+		elsif (addr(13 downto 12) = "01") then
+          data <= rom(2047 - conv_integer(addr(13 downto 4)));
+		-- pi < n < (3*pi)/2
+		elsif (addr(13 downto 12) = "10") then
+          data <= std_logic_vector(not rom(conv_integer(addr(13 downto 4))-2048) + 1);
+		-- (3*pi)/2 < n < 2*pi
+		elsif (addr(13 downto 12) = "11") then
+          data <= std_logic_vector(not rom(4195 - conv_integer(addr(13 downto 4))) + 1);
+		end if;
       end if;
     end if;
 
