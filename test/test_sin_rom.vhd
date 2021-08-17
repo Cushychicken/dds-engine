@@ -25,7 +25,7 @@ architecture test_sin_rom_arch of test_sin_rom is
 
   constant t_clk_per : time := 20 ns; -- Period of a 50MHZ Clock
 
-  component sin_rom_10bits_1024words is
+  component sin_rom is
     port (
       clock : in    std_logic;
       addr  : in    std_logic_vector(13 downto 0);
@@ -41,7 +41,7 @@ begin
 
   --Component Declaration
 
-  dut1 : component sin_rom_10bits_1024words
+  dut1 : component sin_rom
     port map (
       clock => clock_tb,
       addr  => addr_tb,
@@ -57,7 +57,7 @@ begin
     wait for 0.5 * t_clk_per;
 
     -- Assertion ends simulation after 10ms
-    assert now < 1 ms
+    assert now < 10 ms
       report "Simulation Finished."
       severity FAILURE;
 
@@ -72,7 +72,7 @@ begin
       addr_tb <= (addr_tb + 1);
       wait for t_clk_per;
 	  -- Assertion ends simulation after 10ms
-	  assert now < 1 ms
+	  assert now < 10 ms
 	    report "Simulation Finished."
         severity FAILURE;
 

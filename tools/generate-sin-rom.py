@@ -1,7 +1,7 @@
 import math
 
 # Sin Table bit depth
-bitdepth = 10
+bitdepth = 11
 bits = 2 ** bitdepth
 
 # Sin Table entry count
