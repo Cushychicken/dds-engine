@@ -1066,7 +1066,6 @@ begin
 
   memory : process (clock) is
   begin
-	-- TODO: add this addressing scheme to template file    
 	if (clock'event and clock='1') then
       if (addr(13 downto 4) >= 0 and addr(13 downto 4) <= 1023) then
 		-- 0 < n < pi/2
