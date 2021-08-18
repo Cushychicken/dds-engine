@@ -6,7 +6,7 @@ I'm using the `nvc` compiler. Visualizations are done using GTKwave.
 Build and run a testbench like so:
 
 ```vhdl
-nvc -a src/phase_accum.vhd test/test_phase_accum.vhd -e test_phase_accum -r -w
+nvc -a src/phase_accum.vhd test/test_phase_accum.vhd --relax=prefer-explicit -e test_phase_accum -r -w
 ```
 
 I'm using Jeremiah Learly's [VHDL style guide package](https://github.com/jeremiah-c-leary/vhdl-style-guide) for source formatting. Get a source formatting report like so: 
