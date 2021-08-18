@@ -29,7 +29,7 @@ architecture test_sin_rom_arch of test_sin_rom is
 
   -- Constant Values
   constant t_clk_per : time := 20 ns; -- Period of a 50MHZ Clock
-  constant s_header : string := "addr_tb, data_tb"; -- For file
+  constant s_header : string := "addr_tb,data_tb"; -- For file
 
   -- Device Under Test
   component sin_rom is
