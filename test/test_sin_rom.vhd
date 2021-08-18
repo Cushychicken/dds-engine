@@ -84,21 +84,20 @@ begin
 	write(v_Output_Line, s_header);
 	writeline(file_Result_Vectors, v_Output_Line);
     addr_tb   <= "00000000000000";
-	write(v_Output_Line, addr_tb);
+	write(v_Output_Line, conv_integer(unsigned(addr_tb)));
 	write(v_Output_Line, ',');
-	write(v_Output_Line, data_tb);
+	write(v_Output_Line, conv_integer(signed(data_tb)));
 	writeline(file_Result_Vectors, v_Output_Line);
     wait for t_clk_per;
     while (true) loop
       addr_tb <= (addr_tb + 1);
       wait for t_clk_per;
-	  -- Assertion ends simulation after 10ms
-	  --report string(to_unsigned(addr_tb));
-	  --report string(to_unsigned(data_tb));
-	  write(v_Output_Line, addr_tb);
+	  write(v_Output_Line, conv_integer(unsigned(addr_tb)));
 	  write(v_Output_Line, ',');
-	  write(v_Output_Line, data_tb);
+	  write(v_Output_Line, conv_integer(signed(data_tb)));
 	  writeline(file_Result_Vectors, v_Output_Line);
+
+	  -- Assertion ends simulation after 10ms
 	  assert now < 10 ms
 	    report "Simulation Finished."
         severity FAILURE;
