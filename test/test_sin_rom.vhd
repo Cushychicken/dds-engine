@@ -17,6 +17,7 @@ library ieee;
   use ieee.std_logic_1164.all;
   use ieee.std_logic_arith.all;
   use ieee.std_logic_unsigned.all;
+  use ieee.std_logic_textio.all;
 
 library std;
   use std.textio.all;
@@ -28,6 +29,7 @@ architecture test_sin_rom_arch of test_sin_rom is
 
   -- Constant Values
   constant t_clk_per : time := 20 ns; -- Period of a 50MHZ Clock
+  constant s_header : string := "addr_tb, data_tb"; -- For file
 
   -- Device Under Test
   component sin_rom is
@@ -79,7 +81,13 @@ begin
   begin
 	file_open(file_Result_Vectors, "output_results.txt", write_mode);
 
+	write(v_Output_Line, s_header);
+	writeline(file_Result_Vectors, v_Output_Line);
     addr_tb   <= "00000000000000";
+	write(v_Output_Line, addr_tb);
+	write(v_Output_Line, ',');
+	write(v_Output_Line, data_tb);
+	writeline(file_Result_Vectors, v_Output_Line);
     wait for t_clk_per;
     while (true) loop
       addr_tb <= (addr_tb + 1);
@@ -87,7 +95,9 @@ begin
 	  -- Assertion ends simulation after 10ms
 	  --report string(to_unsigned(addr_tb));
 	  --report string(to_unsigned(data_tb));
-	  write(v_Output_Line, addr_tb, data_tb);
+	  write(v_Output_Line, addr_tb);
+	  write(v_Output_Line, ',');
+	  write(v_Output_Line, data_tb);
 	  writeline(file_Result_Vectors, v_Output_Line);
 	  assert now < 10 ms
 	    report "Simulation Finished."
