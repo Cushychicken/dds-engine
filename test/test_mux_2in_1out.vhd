@@ -41,13 +41,12 @@ architecture test_mux_2in_1out_arch of test_mux_2in_1out is
     );
   end component;
 
-
   -- Testbench Signals
   signal tb_clock  : std_logic;
   signal tb_reset  : std_logic;
-  signal tb_sel   : std_logic;
-  signal tb_in0   : std_logic_vector(31 downto 0);
-  signal tb_in1   : std_logic_vector(31 downto 0);
+  signal tb_sel    : std_logic;
+  signal tb_in0    : std_logic_vector(31 downto 0);
+  signal tb_in1    : std_logic_vector(31 downto 0);
   signal tb_output : std_logic_vector(31 downto 0);
 
 begin
@@ -55,12 +54,12 @@ begin
   --Component Declaration
   dut1 : component mux_2in_1out
     port map (
-      i_clock  => tb_clock,
-      i_reset  => tb_reset,
+      i_clock => tb_clock,
+      i_reset => tb_reset,
       i_sel   => tb_sel,
       i_in0   => tb_in0,
       i_in1   => tb_in1,
-      o_out => tb_output
+      o_out   => tb_output
     );
 
   clock_stim : process is
@@ -91,14 +90,15 @@ begin
   mux_stim : process is
   begin
 
-    tb_in0   <= X"AAAA_AAAA";
-    tb_in1   <= X"5555_5555";
-	tb_sel	 <= '0';
+    tb_in0 <= X"AAAA_AAAA";
+    tb_in1 <= X"5555_5555";
+    tb_sel <= '0';
     wait for 3 * t_clk_per;
 
-	tb_sel   <= '1';
-    wait for 22* t_clk_per;
+    tb_sel <= '1';
+    wait for 22 * t_clk_per;
     wait;
+
   end process mux_stim;
 
 end architecture test_mux_2in_1out_arch;

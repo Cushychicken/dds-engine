@@ -54,7 +54,7 @@ begin
         when '1' =>
           o_out <= i_in1;
         when others =>
-		  o_out <= "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ";
+          o_out <= "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ";
 
       end case;
 
