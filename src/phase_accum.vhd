@@ -20,10 +20,15 @@ library ieee;
 
 entity phase_accum is
   port (
-    clock      : in    std_logic;
-    reset      : in    std_logic;
-    freq0_tune : in    std_logic_vector(15 downto 0);
-    phase_out  : out   std_logic_vector(31 downto 0)
+    clock       : in    std_logic;
+    reset       : in    std_logic;
+    freq_sel    : in    std_logic;
+    phase_sel   : in    std_logic;
+    freq0_tune  : in    std_logic_vector(31 downto 0);
+    freq1_tune  : in    std_logic_vector(31 downto 0);
+    phase0_tune : in    std_logic_vector(15 downto 0);
+    phase1_tune : in    std_logic_vector(15 downto 0);
+    phase_out   : out   std_logic_vector(31 downto 0)
   );
 end entity phase_accum;
 
@@ -40,8 +45,17 @@ begin
       phase_out  <= x"00000000";
       phase_temp <= x"00000000";
     elsif (clock'event and clock='1') then
-      phase_temp <= freq0_tune + phase_temp;
-      phase_out  <= phase_temp;
+      if (freq_sel = '0') then
+        phase_temp <= freq0_tune + phase_temp;
+      else
+        phase_temp <= freq1_tune + phase_temp;
+      end if;
+
+      if (phase_sel = '1') then
+        phase_out <= phase_temp + (phase0_tune & X"0000");
+      else
+        phase_out <= phase_temp + (phase1_tune & X"0000");
+      end if;
     end if;
 
   end process accumulator;
