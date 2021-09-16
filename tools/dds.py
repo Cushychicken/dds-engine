@@ -78,7 +78,7 @@ class DirectDigitalSynthesis:
         self.dds_out = np.array([sin_lookup(x) for x in self.phase_trunc])
         return(self.dds_out)
 
-    def generate_dds_spectrum(self, window='rectangular'):
+    def generate_dds_spectrum(self, window='rectangular', n=(2**18)):
         """ Returns a pandas dataframe containing spectral analysis of dds sine output 
 
         Keyword Arguments:
@@ -98,14 +98,14 @@ class DirectDigitalSynthesis:
         elif window == 'blackman':
             arr_window = np.blackman(len(self.phase))
 
-        self.fft = np.fft.fft(np.multiply(self.dds_out, arr_window))
+        self.fft = np.fft.fft(np.multiply(self.dds_out, arr_window), n=n)
         self.fft_mag = np.abs(self.fft)
         self.fft_mag = self.fft_mag * (2 / len(self.fft_mag))
         self.fft_mag = self.fft_mag / float(2**(self.bit_depth))
         self.fft_log_mag = (20 * np.log10(self.fft_mag))
         return(self.fft_log_mag)
 
-    def generate_sin_rom(self):
+    def generate_sin_rom(self, signed=True):
         """ Returns a sin ROM lookup table of (rom_depth) signed data entries with values (bits) wide
 
         #TODO: add unsigned functionality
@@ -115,5 +115,7 @@ class DirectDigitalSynthesis:
         #TODO: add unsigned functionality
         # Subtract 1 from bit depth for signed data (msb is sign bit)
         amplitude = 2**(self.bit_depth - 1)
+            
         self.sin_rom = [int(amplitude * math.sin(a/self.rom_size * 2 * math.pi)) for a in range(self.rom_size)]
+
 
