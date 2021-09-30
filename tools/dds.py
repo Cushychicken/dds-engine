@@ -118,4 +118,25 @@ class DirectDigitalSynthesis:
             
         self.sin_rom = [int(amplitude * math.sin(a/self.rom_size * 2 * math.pi)) for a in range(self.rom_size)]
 
+    def generate_ook_mod(self, tx_data, t_symbol, freq_map, length, retrans=False):
+        """ Returns a modulated OOK bitstream 
+
+        Keyword Arguments:
+        tx_data  -- np.array of bits to transmit
+        t_symbol -- int; number of samples per symbol (aka baudrate)
+        freq_map -- np.array of frequencies to encode bitstream values as
+        length   -- int; length of phase array, in samples
+        retrans  -- boolean; repeats encoding of tx_data bitstream onto 
+                    carrier from the start of the bitstream until 
+                    len(phase) == length (default False)
+
+        """
+        freqs = [ self.freq_to_tuning(freq) for freq in freq_map ]
+        freqs[0] = 0 # Zero because '0' is equivalent to 'off' keying
+        tuning_word_map = np.array(freqs)
+        tuning_word_list = tuning_word_map[tx_data]
+        for word in tuning_word_list:
+            self.phase = self.generate_phase_array(word, t_symbol)
+        return(self.phase)
+
 
